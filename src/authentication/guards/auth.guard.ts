@@ -18,23 +18,18 @@ export class AuthGuard implements CanActivate {
     try {
       const authHeader = request.headers.authorization
       if (!authHeader) {
-        throw new UnauthorizedException(
-          "Foydalanuvchi avtorizatsiyadan o'tmagan"
-        )
+        throw new UnauthorizedException('User Not Authenticated!')
       }
 
       const [bearer, token] = authHeader.split(' ')
       if (bearer !== 'Bearer' || !token) {
-        throw new UnauthorizedException(
-          "Foydalanuvchi avtorizatsiyadan o'tmagan"
-        )
+        throw new UnauthorizedException('User Not Authenticated!')
       }
 
-      const user = this.jwtService.verify(token)
-      request.user = user // Foydalanuvchi ma'lumotlarini requestga qo'shib qo'yamiz
+      request.user = this.jwtService.verify(token)
       return true
     } catch (e) {
-      throw new UnauthorizedException("Foydalanuvchi avtorizatsiyadan o'tmagan")
+      throw new UnauthorizedException('User Not Authenticated!')
     }
   }
 }

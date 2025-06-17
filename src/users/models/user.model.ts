@@ -5,7 +5,7 @@ interface UserCreationAttributes {
   fullName: string
   username: string
   password: string
-  roles?: Roles[]
+  role: Roles
 }
 
 @Table({ tableName: 'users', timestamps: true })
@@ -38,14 +38,7 @@ export class User extends Model<User, UserCreationAttributes> {
 
   @Column({
     type: DataType.ENUM(...Object.values(Roles)),
-    defaultValue: Roles.USER,
     allowNull: false
   })
   role: Roles
-
-  // @BeforeCreate
-  // static async hashPassword(instance: User) {
-  //   const salt = await bcrypt.genSalt(10)
-  //   instance.password = await bcrypt.hash(instance.password, salt)
-  // }
 }

@@ -1,13 +1,6 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException
-} from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { CreateUserDto } from '../users/dto/create-user.dto'
-import { User } from '../users/models/user.model'
 import { UsersService } from '../users/users.service'
 import { LoginDto } from './dto/login.dto'
 
@@ -18,27 +11,19 @@ export class AuthenticationService {
     private readonly jwtService: JwtService
   ) {}
 
-  async registration(dto: CreateUserDto) {
-    const candidate = await this.usersService.getUserByUsername(dto.username)
-    if (candidate) {
-      throw new HttpException('User exist!', HttpStatus.BAD_REQUEST)
-    }
-    const hashedPassword = await bcrypt.hash(dto.password, 10)
-    const user = await this.usersService.createUser({
-      ...dto,
-      password: hashedPassword
-    })
-    return this.generateToken(user)
-  }
-
   async login(dto: LoginDto) {
     const user = await this.validateUser(dto)
-    return this.generateToken(user)
-  }
-
-  private async generateToken(user: User) {
     const payload = { id: user.id, username: user.username, role: user.role }
+
+    const userResponse = {
+      id: user.id,
+      fullName: user.fullName,
+      username: user.username,
+      role: user.role
+    }
+
     return {
+      ...userResponse,
       token: this.jwtService.sign(payload)
     }
   }

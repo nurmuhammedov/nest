@@ -1,7 +1,9 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { ForbiddenException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import * as bcrypt from 'bcrypt'
+import { RoleEnum } from '../authentication/roles.enum'
 import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './models/user.model'
 
 @Injectable()
@@ -27,9 +29,13 @@ export class UsersService {
     }
   }
 
-  async getAllUsers() {
+  async getAllUsers(role: RoleEnum = RoleEnum.USER) {
+    console.log(role, 'ROLE')
     return this.userRepository?.findAll({
-      attributes: { exclude: ['password'] }
+      attributes: { exclude: ['password'] },
+      where: {
+        role: role
+      }
     })
   }
 
@@ -45,7 +51,28 @@ export class UsersService {
     return user
   }
 
+  async updateUser(id: number, dto: UpdateUserDto) {
+    await this.getUser(id)
+    if (dto.password) {
+      dto.password = await bcrypt.hash(dto.password, 10)
+    }
+    await this.userRepository.update(dto, { where: { id } })
+
+    return this.getUser(id)
+  }
+
   async getUserByUsername(username: string) {
     return this.userRepository.findOne({ where: { username }, attributes: { include: ['password'] } })
+  }
+
+  async deleteUser(id: number) {
+    const user = await this.getUser(id)
+
+    if (user.role === RoleEnum.ADMIN) {
+      throw new ForbiddenException('Admins cannot be deleted!')
+    }
+
+    await this.userRepository.destroy({ where: { id } })
+    return { message: `User with ID #${id} has been deleted.` }
   }
 }

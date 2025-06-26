@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 import { Roles } from '../authentication/decorators/roles.decorator'
-import { Roles as RoleEnum } from '../authentication/roles.enum'
+import { RoleEnum } from '../authentication/roles.enum'
 import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
 import { UsersService } from './users.service'
 
 @Controller('users')
@@ -20,7 +21,17 @@ export class UsersController {
   }
 
   @Get()
-  getAll() {
-    return this.usersService.getAllUsers()
+  getAll(@Query('role') role?: RoleEnum) {
+    return this.usersService.getAllUsers(role)
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(id, updateUserDto)
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: number) {
+    return this.usersService.deleteUser(id)
   }
 }

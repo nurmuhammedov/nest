@@ -1,8 +1,8 @@
-import { Roles } from '../../authentication/roles.enum'
+import { RoleEnum } from '../../authentication/roles.enum'
 
 export class CreateUserDto {
-  readonly fullName: string
-  readonly username: string
-  readonly password: string
-  readonly role: Roles
+  fullName: string
+  username: string
+  password: string
+  role: RoleEnum
 }

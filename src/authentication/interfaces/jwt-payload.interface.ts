@@ -1,7 +1,7 @@
-import { Roles } from '../roles.enum'
+import { RoleEnum } from '../roles.enum'
 
 export interface JwtPayload {
   id: number
   username: string
-  role: Roles
+  role: RoleEnum
 }

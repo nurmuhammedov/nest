@@ -6,7 +6,7 @@ async function start() {
   const app = await NestFactory.create(AppModule)
 
   app.enableCors({
-    origin: 'http://192.168.1.82',
+    origin: ['http://127.7.7.7', 'http://192.168.1.82'],
     methods: 'GET,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept, Authorization',
     credentials: true

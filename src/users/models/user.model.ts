@@ -1,11 +1,11 @@
 import { Column, DataType, DefaultScope, Model, Table } from 'sequelize-typescript'
-import { Roles } from '../../authentication/roles.enum'
+import { RoleEnum } from '../../authentication/roles.enum'
 
 interface UserCreationAttributes {
   fullName: string
   username: string
   password: string
-  role: Roles
+  role: RoleEnum
 }
 
 @DefaultScope(() => ({
@@ -44,7 +44,7 @@ export class User extends Model<User, UserCreationAttributes> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: Roles.USER
+    defaultValue: RoleEnum.USER
   })
-  declare role: Roles
+  declare role: RoleEnum
 }

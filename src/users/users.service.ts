@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt'
 import { RoleEnum } from '../authentication/roles.enum'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { User } from './models/user.model'
+import { User } from './models/users.model'
 
 @Injectable()
 export class UsersService {

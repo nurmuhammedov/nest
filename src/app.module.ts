@@ -8,7 +8,8 @@ import { AppService } from './app.service'
 import { AuthenticationModule } from './authentication/authentication.module'
 import { AuthGuard } from './authentication/guards/auth.guard'
 import { RolesGuard } from './authentication/guards/roles.guard'
-import { User } from './users/models/user.model'
+import { FilesModule } from './files/files.module'
+import { User } from './users/models/users.model'
 import { UsersModule } from './users/users.module'
 
 @Module({
@@ -40,7 +41,8 @@ import { UsersModule } from './users/users.module'
       autoLoadModels: true,
       synchronize: true,
       models: [User]
-    })
+    }),
+    FilesModule
   ],
   exports: []
 })
